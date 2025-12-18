@@ -383,10 +383,14 @@ function handleQRCodeLongPress() {
 // 动态更新 Open Graph 元标签
 function updateOpenGraphMetaTags() {
   const pageUrl = window.location.href;
+  // 生成完整的图片 URL
+  const imageUrl = new URL('./img/icon.webp', window.location.origin).href;
   
-  // 动态更新页面 URL
+  // 动态更新页面 URL 和图片
   document.getElementById('og-url').setAttribute('content', pageUrl);
+  document.getElementById('og-image').setAttribute('content', imageUrl);
   document.getElementById('twitter-url').setAttribute('content', pageUrl);
+  document.getElementById('twitter-image').setAttribute('content', imageUrl);
   
   // 优化小红书跳转逻辑
   initXiaohongshuLink();
