@@ -31,7 +31,7 @@ const wechatConfig = {
 // 社交分享配置
 const shareConfig = {
   title: "拾景影像空间摄影",
-  description: "珓三角空间摄影",
-  wechatShareText: "推荐你下载拾景影像空间摄影，添加【我的微信】了解更多",
-  xiaohongshuShareText: "推荐你关注了解更多作品"
+  description: "珓三角空间摄影服务",
+  xiaohongshuShareText: "推荐你关注了解更多作品",
+  wechatShareText: "拾景影像空间摄影服务"
 };

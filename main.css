@@ -587,10 +587,16 @@ body {
   box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
 }
 
-.social-link.wechat-qr:hover {
-  background: #09b83e;
-  border-color: #09b83e;
-  box-shadow: 0 4px 12px rgba(9, 184, 62, 0.3);
+.social-link.share-btn {
+  background: linear-gradient(135deg, var(--green), #34c759);
+  color: #ffffff;
+  border-color: var(--green);
+}
+
+.social-link.share-btn:hover {
+  background: linear-gradient(135deg, #30b959, #2eaf51);
+  border-color: #2eaf51;
+  box-shadow: 0 4px 12px rgba(52, 199, 89, 0.4);
 }
 
 /* ======================= 响应式设计 ======================= */

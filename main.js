@@ -325,7 +325,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initCopyButton();
   initWechatIdCopy();
   initQRCodeLongPress();
-  initSocialLinks();
+  initShareButtons();
+  updateOpenGraphMetaTags();
 });
 
 // 初始化二维码长按识别功能
@@ -366,30 +367,92 @@ function initQRCodeLongPress() {
   });
 }
 
-// 初始化社交分享链接
-function initSocialLinks() {
-  const wechatQrLink = document.querySelector('.social-link.wechat-qr');
-  if (wechatQrLink) {
-    wechatQrLink.addEventListener('click', (e) => {
-      e.preventDefault();
-      showWechatShareModal();
+// 处理二维码长按
+function handleQRCodeLongPress() {
+  if (isInWechat()) {
+    console.log('二维码长按被检测，微信客户端会自动处理识别');
+  }
+}
+
+// 初始化分享按钮
+function initShareButtons() {
+  const wechatShareBtn = document.getElementById('wechat-share-btn');
+  if (wechatShareBtn) {
+    wechatShareBtn.addEventListener('click', () => {
+      showShareModal();
     });
   }
 }
 
-// 显示微信分享弹窗
-function showWechatShareModal() {
-  const message = `<strong>分享二维码</strong><br><br>
-长按或保存下方二维码：<br>
-<img src="./img/qrcode.png" style="width: 200px; height: 200px; border-radius: 12px; margin: 16px 0; display: block;" alt="微信二维码">
-<br>然后在微信中打开，扫描即可添加我`;
+// 显示分享选项弹窗
+function showShareModal() {
+  const pageUrl = window.location.href;
+  const pageTitle = document.title;
+  const message = `<strong>分享此页面</strong><br><br>
+选择分享方式：<br><br>
+<div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin: 16px 0;">
+  <button class="share-option" data-platform="wechat-friends" style="padding: 10px 16px; background: #09b83e; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
+    💬 分享给微信好友
+  </button>
+  <button class="share-option" data-platform="xiaohongshu" style="padding: 10px 16px; background: #ff6b6b; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
+    🔴 分享到小红书
+  </button>
+</div>`;
   
-  showCustomModal('微信分享', message, [
-    {text: '复制链接', callback: () => {
-      navigator.clipboard.writeText(window.location.href).then(() => {
-        console.log('链接已复制');
-      });
-    }},
-    {text: '关闭'}
-  ]);
+  showCustomModal('分享页面', message, [{text: '关闭'}]);
+  
+  // 添加分享选项的事件监听
+  document.querySelectorAll('.share-option').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const platform = btn.getAttribute('data-platform');
+      handleShareClick(platform, pageUrl, pageTitle);
+    });
+  });
+}
+
+// 处理分享点击
+function handleShareClick(platform, url, title) {
+  if (platform === 'wechat-friends') {
+    // 微信好友分享
+    const wechatShareUrl = `weixin://dl/moments/?functype=1&message=${encodeURIComponent(title)}&mediatagname=&objecttype=link&appid=&title=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`;
+    window.location.href = wechatShareUrl;
+    
+    // 降级方案：显示复制提示
+    setTimeout(() => {
+      const message = `<strong>分享到微信</strong><br><br>
+请在微信中：<br>
+1. 打开「发现」→「朋友圈」<br>
+2. 点击「+」发布<br>
+3. 粘贴链接并分享<br><br>
+<strong>链接已复制到剪贴板</strong>`;
+      navigator.clipboard.writeText(url);
+      showCustomModal('微信分享', message, [{text: '关闭'}]);
+    }, 500);
+  } else if (platform === 'xiaohongshu') {
+    // 小红书分享
+    const xiaohongshuUrl = `https://www.xiaohongshu.com/`;
+    window.open(xiaohongshuUrl, '_blank');
+    
+    // 显示分享提示
+    const message = `<strong>分享到小红书</strong><br><br>
+分享链接已复制，请：<br>
+1. 打开小红书应用<br>
+2. 创建新笔记<br>
+3. 粘贴链接<br>
+4. 添加描述并发布`;
+    navigator.clipboard.writeText(`${title}\n${url}`);
+    showCustomModal('小红书分享', message, [{text: '关闭'}]);
+  }
+}
+
+// 动态更新 Open Graph 元标签
+function updateOpenGraphMetaTags() {
+  const pageUrl = window.location.href;
+  const imageUrl = new URL('./img/qrcode.png', window.location.href).href;
+  
+  // 更新 Open Graph 标签
+  document.getElementById('og-url').setAttribute('content', pageUrl);
+  document.getElementById('og-image').setAttribute('content', imageUrl);
+  document.getElementById('twitter-url').setAttribute('content', pageUrl);
+  document.getElementById('twitter-image').setAttribute('content', imageUrl);
 }
