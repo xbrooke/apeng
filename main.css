@@ -73,6 +73,7 @@ body {
   justify-content: center;
   transition: all 0.3s ease;
   border-radius: 12px;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .theme-switch:hover {
@@ -91,6 +92,7 @@ body {
   position: relative;
   transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border: 1px solid var(--divider-color);
+  pointer-events: none;
 }
 
 .switch-thumb {
@@ -561,8 +563,29 @@ body {
   }
   
   .theme-switch-container {
-    top: 12px;
-    right: 12px;
+    top: 8px;
+    right: 8px;
+  }
+  
+  .theme-switch {
+    width: 48px;
+    height: 28px;
+    border-radius: 10px;
+  }
+  
+  .switch-track {
+    border-radius: 14px;
+  }
+  
+  .switch-thumb {
+    width: 24px;
+    height: 24px;
+    top: 2px;
+    left: 2px;
+  }
+  
+  [data-theme="dark"] .switch-thumb {
+    transform: translateX(18px);
   }
   
   .wechat-jump-btn {
