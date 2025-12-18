@@ -6,13 +6,15 @@ function initThemeToggle() {
   // 检查本地存储中的主题设置
   const savedTheme = localStorage.getItem('theme');
   const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const isWechatBrowser = isInWechat();
   
   // 设置初始主题
   let currentTheme;
   if (savedTheme) {
     currentTheme = savedTheme;
   } else {
-    currentTheme = systemPrefersDark ? 'dark' : 'light';
+    // 如果在微信内，直接使用深色模式；否则检测系统设置
+    currentTheme = isWechatBrowser ? 'dark' : (systemPrefersDark ? 'dark' : 'light');
   }
   
   setTheme(currentTheme);
@@ -91,14 +93,75 @@ function initWechatJump() {
 
 // 在微信内部时的提示方案
 function showWechatInternalTip() {
-  const message = `亲，你在微信内部打开了本页面。
+  const message = `你在微信内部打开了本页面。<br><br>
+请使用右上角菜单，选择「在浏览器中打开」或「用系统浏览器打开」，<br>
+然后点击按钮即可直接跳转到微信添加页面。<br><br>
+或者，你也可以在微信中长按下方二维码识别，<br>
+或者直接搜索：<strong>${wechatConfig.username}</strong>`;
+  
+  showCustomModal('提示', message, [{text: '关闭'}]);
+}
 
-请使用右上角菜单，选择「在浏览器中打开」或「用系统浏览器打开」，
-然后点击按钮即可直接跳转到微信添加页面。
-
-或者，你也可以在微信中长按下方二维码识别，
-或者直接搜索：${wechatConfig.username}`;
-  alert(message);
+// 自定义弹窗提示
+function showCustomModal(title, message, buttons = [{text: '确定', callback: null}]) {
+  // 创建模态框容器
+  const modal = document.createElement('div');
+  modal.className = 'custom-modal';
+  modal.setAttribute('role', 'dialog');
+  modal.setAttribute('aria-modal', 'true');
+  
+  // 创建背景遮罩
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  
+  // 创建内容容器
+  const content = document.createElement('div');
+  content.className = 'modal-content';
+  
+  // 标题
+  const titleEl = document.createElement('h2');
+  titleEl.className = 'modal-title';
+  titleEl.textContent = title;
+  
+  // 消息
+  const messageEl = document.createElement('p');
+  messageEl.className = 'modal-message';
+  messageEl.innerHTML = message;
+  
+  // 按钮容器
+  const buttonsContainer = document.createElement('div');
+  buttonsContainer.className = 'modal-buttons';
+  
+  // 添加按钮
+  buttons.forEach((btn, index) => {
+    const button = document.createElement('button');
+    button.className = 'modal-button';
+    if (index === buttons.length - 1) button.classList.add('primary');
+    button.textContent = btn.text;
+    button.addEventListener('click', () => {
+      if (btn.callback) btn.callback();
+      document.body.removeChild(modal);
+    });
+    buttonsContainer.appendChild(button);
+  });
+  
+  // 组装弹窗
+  content.appendChild(titleEl);
+  content.appendChild(messageEl);
+  content.appendChild(buttonsContainer);
+  modal.appendChild(overlay);
+  modal.appendChild(content);
+  
+  // 添加到页面
+  document.body.appendChild(modal);
+  
+  // 点击背景关闭
+  overlay.addEventListener('click', () => {
+    document.body.removeChild(modal);
+  });
+  
+  // 聚焦第一个按钮
+  buttonsContainer.querySelector('button').focus();
 }
 
 // 在浏览器中的跳转方案

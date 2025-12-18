@@ -405,6 +405,123 @@ body {
   color: var(--font-secondary);
 }
 
+/* ======================= 自定义弹窗样式 ======================= */
+.custom-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  animation: fadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+}
+
+.modal-content {
+  position: relative;
+  background: var(--card-bg);
+  border-radius: 20px;
+  padding: 28px;
+  max-width: 85vw;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--font-color);
+  margin: 0 0 16px 0;
+  word-break: break-word;
+}
+
+.modal-message {
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--font-secondary);
+  line-height: 1.6;
+  margin: 0 0 24px 0;
+  word-break: break-word;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.modal-button {
+  padding: 10px 16px;
+  border: 1px solid var(--divider-color);
+  background: var(--second-bg);
+  color: var(--font-color);
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-width: 80px;
+  text-align: center;
+}
+
+.modal-button:hover {
+  background: var(--divider-color);
+}
+
+.modal-button.primary {
+  background: var(--green);
+  color: #ffffff;
+  border-color: var(--green);
+}
+
+.modal-button.primary:hover {
+  background: #34c759;
+  box-shadow: 0 4px 12px rgba(52, 199, 89, 0.3);
+}
+
+.modal-button:active {
+  transform: scale(0.95);
+}
+
+.modal-button:focus {
+  outline: 2px solid var(--green);
+  outline-offset: 2px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 /* ======================= 页脚 ======================= */
 .footer {
   position: fixed;
