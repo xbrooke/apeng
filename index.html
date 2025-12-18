@@ -11,6 +11,23 @@
   <meta name="apple-mobile-web-app-title" content="拾景影像空间摄影">
   <meta name="description" content="联系拾景影像空间摄影，获取更多作品。">
   <meta name="theme-color" content="#ffffff">
+  <script>
+    // 立即执行：检测系统主题，避免页面闪烁
+    (function() {
+      const savedTheme = localStorage.getItem('theme');
+      const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const isWechat = /micromessenger/i.test(navigator.userAgent);
+      
+      // 确定最终主题
+      let theme = savedTheme;
+      if (!theme) {
+        theme = isWechat ? 'dark' : (isDarkMode ? 'dark' : 'light');
+      }
+      
+      // 立即应用主题
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
 </head>
 <body>
   <div class="wechatOA">
@@ -50,7 +67,7 @@
           <p class="wechat-id-label">微信 ID</p>
           <div class="wechat-id-box">
             <span class="wechat-id-text" id="wechat-id-display">Z99060720</span>
-            <button class="wechat-id-copy-btn" id="wechat-id-copy-btn" aria-label="复制微信号" type="button" title="一键复制到剩贴板">
+            <button class="wechat-id-copy-btn" id="wechat-id-copy-btn" aria-label="复制微信号" type="button" title="一键复制到剪贴板">
               <span id="wechat-id-copy-text">复制</span>
             </button>
           </div>

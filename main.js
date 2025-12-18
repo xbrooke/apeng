@@ -166,13 +166,20 @@ function showCustomModal(title, message, buttons = [{text: '确定', callback: n
 
 // 在浏览器中的跳转方案
 function performWechatJump() {
-  // 微信URI Scheme的官方限制无法直接跳转到添加页面
-  // 常用三种方案组合处理
+  // 最优方案：安卓上使用微信分享功能
+  // 谷歌/苹果浏览器上使用 URI Scheme
+  // 作为最后降级：提示用户手动搜索
   
   const timeout = 2000;
   let hasResponded = false;
   
-  // 监听页面可见性变化（如果用户切换到微信应用，页面会隐藏）
+  // 检测是何种设备/浏览器
+  const ua = navigator.userAgent.toLowerCase();
+  const isAndroid = /android/.test(ua);
+  const isIOS = /iphone|ipad|ipod/.test(ua);
+  const isWeixin = /micromessenger/.test(ua);
+  
+  // 监听页面可见性变化
   const handleVisibilityChange = () => {
     if (document.hidden) {
       hasResponded = true;
@@ -182,13 +189,22 @@ function performWechatJump() {
   };
   document.addEventListener('visibilitychange', handleVisibilityChange);
   
-  // 尝试方案：使用接触上业今信息API
-  try {
-    // 如果应用支持接触微信上业今信息
-    const contactCard = `weixin://contacts/detail/username/${wechatConfig.username}`;
-    window.location.href = contactCard;
-  } catch (e) {
-    console.log('上业今信息API不成功');
+  // 根据设备类型选择不同的跳转方案
+  let jumpUrl = '';
+  
+  if (isAndroid) {
+    // Android：优先使用 Intent Scheme
+    // intent://profile/username/{username}#Intent;scheme=weixin;package=com.tencent.mm;end
+    // 或使用前端上的 URI Scheme
+    jumpUrl = `weixin://contacts/profile/send/?username=${wechatConfig.username}`;
+  } else if (isIOS) {
+    // iOS：使用 weixin:// scheme
+    jumpUrl = `weixin://contacts/profile/send/?username=${wechatConfig.username}`;
+  }
+  
+  // 尝试跳转
+  if (jumpUrl) {
+    window.location.href = jumpUrl;
   }
   
   // 如果超过超时时间仍未切换应用，使用降级方案
@@ -201,45 +217,19 @@ function performWechatJump() {
 }
 
 // 降级方案：提供多种选择
-// 先复制，再提示
 function showFallbackOptions() {
-  // 先复制用户名到剩贴板（需要在alert前执行）
+  const message = `微信未URI响应<br><br>
+推荐方案：<br>
+<strong>1. 扫描二维码</strong> ：会自动跳转添加我<br>
+<strong>2. 在微信中搜索</strong>：搜索手机号 <strong>${wechatConfig.username}</strong><br>
+<strong>3. 复制微信号</strong>：号码已复制，在微信中黄粘贴`;
+  
+  // 尝试复制微信号
   if (navigator.clipboard) {
-    navigator.clipboard.writeText(wechatConfig.username).then(() => {
-      // 复制成功
-      const message = `微信未URI响应
-
-已将你的微信号复制到剩贴板：${wechatConfig.username}
-
-请选择以下方式：
-1. 扫描二维码 → 点下方加友
-2. 打开微信 → 搜索上述号码
-3. 直接黄粘贴你剥的号码`;
-      alert(message);
-    }).catch(() => {
-      // 复制失败，按暴露方案处理
-      const message = `微信未URI响应
-
-请手动复制你的微信号：${wechatConfig.username}
-
-然后：
-1. 扫描二维码 → 点下方加友
-2. 打开微信 → 搜索上述号码
-3. 或黄粘贴你的号码`;
-      alert(message);
-    });
-  } else {
-    // 浏览器不支持 clipboard API
-    const message = `微信未URI响应
-
-你的微信号：${wechatConfig.username}
-
-请选择以下方式：
-1. 扫描二维码 → 点下方加友
-2. 打开微信 → 搜索上述号码
-3. 手动复制上述号码并黄粘贴`;
-    alert(message);
+    navigator.clipboard.writeText(wechatConfig.username);
   }
+  
+  showCustomModal('提示', message, [{text: '关闭'}]);
 }
 
 // 初始化复制功能
@@ -337,20 +327,20 @@ document.addEventListener('DOMContentLoaded', () => {
   initQRCodeLongPress();
 });
 
-// 初始化二维码長按識別功能
+// 初始化二维码长按识别功能
 function initQRCodeLongPress() {
   const qrcode = document.getElementById('wechat-qrcode');
   if (!qrcode) return;
   
-  // 識別是否在微信中，如果是，添加提示文本
+  // 识别是否在微信中，如果是，添加提示文本
   if (isInWechat()) {
     const tipsText = document.querySelector('.tips');
     if (tipsText) {
-      tipsText.innerHTML = '扫描或<strong>長按</strong>二维码添加微信';
+      tipsText.innerHTML = '扫描或<strong>长按</strong>二维码添加微信';
     }
   }
   
-  // 添加長按傩事件監听
+  // 添加长按事件监听
   let pressTimer = null;
   const longPressDuration = 500;
   
@@ -375,9 +365,9 @@ function initQRCodeLongPress() {
   });
 }
 
-// 處理二维码長按
+// 处理二维码长按
 function handleQRCodeLongPress() {
   if (isInWechat()) {
-    console.log('二维码長按被檢測，微信客戶端會自動处理識別');
+    console.log('二维码长按被检测，微信客户端会自动处理识别');
   }
 }
