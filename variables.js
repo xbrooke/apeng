@@ -1,7 +1,7 @@
 // 微信公众号信息
 const oaConfig = {
   name: "拾景影像空间摄影",
-  description: "珠三角影像达人"
+  description: "珠三角空间摄影"
 };
 
 // 网站备案信息
