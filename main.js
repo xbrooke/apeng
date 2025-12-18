@@ -102,38 +102,58 @@ function showWechatInternalTip() {
 
 // 在浏览器中的跳转方案
 function performWechatJump() {
-  // 使用微信官方 URI Scheme 直接跳转到添加用户页面
-  // weixin://bizmall/malldetail?id=用户名 - 跳转到用户主页
-  // weixin://profile/username/用户名 - 直接添加用户
-  const addUserUrl = `weixin://profile/username/${wechatConfig.username}`;
+  // 微信URI Scheme的官方限制无法直接跳转到添加页面
+  // 常用三种方案组合处理
   
-  const timeout = 2500; // 2.5秒超时
-  
-  // 尝试跳转微信
-  window.location.href = addUserUrl;
+  const timeout = 2000;
+  let hasResponded = false;
   
   // 监听页面可见性变化（如果用户切换到微信应用，页面会隐藏）
   const handleVisibilityChange = () => {
     if (document.hidden) {
+      hasResponded = true;
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       clearTimeout(fallbackTimer);
     }
   };
   document.addEventListener('visibilitychange', handleVisibilityChange);
   
+  // 尝试方案：使用接触上业今信息API
+  try {
+    // 如果应用支持接触微信上业今信息
+    const contactCard = `weixin://contacts/detail/username/${wechatConfig.username}`;
+    window.location.href = contactCard;
+  } catch (e) {
+    console.log('上业今信息API不成功');
+  }
+  
   // 如果超过超时时间仍未切换应用，使用降级方案
   const fallbackTimer = setTimeout(() => {
-    document.removeEventListener('visibilitychange', handleVisibilityChange);
-    
-    // 降级方案：引导用户使用二维码或手动搜索
-    const message = `微信未响应。
-
-请选择以下方式之一：
-1. 扫描页面上的二维码
-2. 在微信中搜索用户名：${wechatConfig.username}
-3. 在浏览器地址栏手动输入微信用户名`;
-    alert(message);
+    if (!hasResponded) {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      showFallbackOptions();
+    }
   }, timeout);
+}
+
+// 降级方案：提供多种选择
+// 使用一个模态框或提示（比alert更正式）
+function showFallbackOptions() {
+  const message = `微信URI Scheme没有响应
+
+请选择以下方式：
+
+1. 扫描二维码→ 点下方加友
+2. 会话窗口搜索：${wechatConfig.username}
+3. 复制游客信息：（已为你批量复制）`;
+  alert(message);
+  
+  // 为用户复制信息
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(wechatConfig.username).catch(err => {
+      console.log('复制失败:', err);
+    });
+  }
 }
 
 // 初始化复制功能
