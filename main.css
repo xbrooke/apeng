@@ -246,6 +246,121 @@ body {
   color: var(--font-secondary);
 }
 
+/* ======================= 微信号显示和复制 ======================= */
+.wechat-id-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.wechat-id-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--font-secondary);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.wechat-id-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, var(--second-bg) 0%, var(--card-bg) 100%);
+  border: 1px solid var(--divider-color);
+  border-radius: 12px;
+  padding: 12px 14px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.wechat-id-box:hover {
+  border-color: var(--green);
+  box-shadow: 0 2px 8px rgba(52, 199, 89, 0.15);
+}
+
+.wechat-id-text {
+  flex: 1;
+  font-family: 'Courier New', 'Monaco', 'SF Mono', monospace;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--font-color);
+  word-break: break-all;
+  letter-spacing: 0.5px;
+}
+
+.wechat-id-copy-btn {
+  padding: 8px 14px;
+  background: var(--green);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 6px rgba(52, 199, 89, 0.25);
+}
+
+.wechat-id-copy-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(52, 199, 89, 0.4);
+}
+
+.wechat-id-copy-btn:active {
+  transform: translateY(0);
+}
+
+.wechat-id-copy-btn:focus {
+  outline: 2px solid var(--green);
+  outline-offset: 2px;
+}
+
+/* 复制成功状态 */
+.wechat-id-copy-btn.copied {
+  background: var(--green);
+  animation: copySuccess 0.6s ease-out;
+}
+
+/* 复制失败状态 */
+.wechat-id-copy-btn.failed {
+  background: #ff3b30;
+  animation: copyFailed 0.6s ease-out;
+}
+
+/* 成功动画 */
+@keyframes copySuccess {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 2px 6px rgba(52, 199, 89, 0.25);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(52, 199, 89, 0.4);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 2px 6px rgba(52, 199, 89, 0.25);
+  }
+}
+
+/* 失败动画 */
+@keyframes copyFailed {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-3px);
+  }
+  75% {
+    transform: translateX(3px);
+  }
+}
+
 /* ======================= 微信跳转容器 ======================= */
 .wechat-jump-container {
   width: 100%;

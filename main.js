@@ -217,9 +217,57 @@ function initCopyButton() {
   }
 }
 
+// 初始化微信号复制功能
+function initWechatIdCopy() {
+  const copyBtn = document.getElementById('wechat-id-copy-btn');
+  const copyText = document.getElementById('wechat-id-copy-text');
+  const idDisplay = document.getElementById('wechat-id-display');
+  
+  if (copyBtn && copyText && idDisplay) {
+    copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(wechatConfig.username);
+        const originalText = copyText.textContent;
+        
+        // 改变按钮样式为成功状态
+        copyBtn.classList.add('copied');
+        copyText.textContent = copyConfig.successText;
+        
+        setTimeout(() => {
+          copyText.textContent = originalText;
+          copyBtn.classList.remove('copied');
+        }, copyConfig.resetDelay);
+      } catch (err) {
+        const originalText = copyText.textContent;
+        
+        // 改变按钮样式为失败状态
+        copyBtn.classList.add('failed');
+        copyText.textContent = copyConfig.failText;
+        
+        setTimeout(() => {
+          copyText.textContent = originalText;
+          copyBtn.classList.remove('failed');
+        }, copyConfig.resetDelay);
+      }
+    });
+    
+    // 键盘支持
+    copyBtn.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        copyBtn.click();
+      }
+    });
+    
+    // 使用 variables.js 中的配置更新显示的微信号
+    idDisplay.textContent = wechatConfig.username;
+  }
+}
+
 // 初始化所有功能
 document.addEventListener('DOMContentLoaded', () => {
   initThemeToggle();
   initWechatJump();
   initCopyButton();
+  initWechatIdCopy();
 });
