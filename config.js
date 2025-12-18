@@ -1,15 +1,15 @@
-const oa_name = "拾景影像空间摄影";
-const oa_description = "";
-
-function replaceText(elementId, newText) {
-  var element = document.getElementById(elementId);
-  if (element) {
-      element.innerText = newText;
-  } else {
-      console.log("Element with ID '" + elementId + "' not found.");
+document.addEventListener('DOMContentLoaded', function() {
+  function replaceText(elementId, newText) {
+    const element = document.getElementById(elementId);
+    if (element) {
+      element.textContent = newText;
+    }
   }
-}
 
-replaceText('wechatOA-name', oa_name);
-replaceText('wechatOA-description', oa_description)
-replaceText('web-beian', web_beian)
+  replaceText('wechatOA-name', oaConfig.name);
+  replaceText('wechatOA-description', oaConfig.description);
+  
+  if (siteConfig.beian) {
+    replaceText('web-beian', siteConfig.beian);
+  }
+});

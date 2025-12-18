@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,45 +7,61 @@
   <title>扫码添加「拾景影像空间摄影」</title>
   <link rel="stylesheet" href="./main.css">
   <link rel="icon" type="image/x-icon" href="./img/icon.webp">
-  <link rel="apple-touch-icon" href="./img/icon-r.webp">
-  <meta name="apple-mobile-web-app-title" content="领克OSN交流群">
-  <link rel="bookmark" href="./img/icon.webp">
-  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="./img/icon-r.webp">
-  <meta name="description" content="加入群聊，获取更多最新的车机、软件等技巧。">
-  <meta name="theme-color" content="#f6f7f8">
+  <link rel="apple-touch-icon" href="./img/icon.webp">
+  <meta name="apple-mobile-web-app-title" content="拾景影像空间摄影">
+  <meta name="description" content="联系拾景影像空间摄影，获取更多作品。">
+  <meta name="theme-color" content="#ffffff">
 </head>
 <body>
   <div class="wechatOA">
-    <div class="wechat">
-      <div class="wechat-need-reply" id="wechat-need-reply" style="display: none;">
-        <span class="wechat-need-reply-front">扫描二维码并回复</span>
-        <div class="wechat-need-reply-copybtn" id="wechat-need-reply-copybtn">
-          <span class="wechat-need-reply-text" id="wechat-need-reply-text">隔空投送</span>
-          <img class="wechat-need-reply-copybtn-img" alt="copy" src="./img/copy.png">
+    <!-- 主题切换开关 -->
+    <div class="theme-switch-container">
+      <button class="theme-switch" id="theme-switch" aria-label="切换深色模式" type="button">
+        <div class="switch-track">
+          <div class="switch-thumb"></div>
         </div>
-        <span class="wechat-need-reply-back" id="wechat-need-reply-back">即可获取资源与教程</span>
-  
-      </div>
-      <div class="wechat-card">
-        <img src="./img/qrcode.png" class="qrcode" alt="qrcode">
-        <div class="tips">扫码添加「拾景影像空间摄影」</div>
+      </button>
+    </div>
+    
+    <main class="wechat" role="main">
+      <section class="wechat-need-reply" id="wechat-need-reply" style="display: none;">
+        <h2 class="wechat-need-reply-front">添加拾景影像空间摄影并回复</h2>
+        <p class="wechat-need-reply-back" id="wechat-need-reply-back">即可获取资源与教程</p>
+        <button class="wechat-need-reply-copybtn" id="wechat-need-reply-copybtn" aria-label="复制回复内容" type="button">
+          <span id="wechat-need-reply-text">隔空投送</span>
+          <img class="wechat-need-reply-copybtn-img" alt="" src="./img/icon.webp">
+        </button>
+      </section>
+      
+      <article class="wechat-card">
+        <img src="./img/qrcode.png" class="qrcode" alt="微信公众号二维码，扫描添加">
+        <p class="tips">扫描二维码添加微信</p>
+        
         <div class="wechatOA-card">
-          <div class="wechatOA-head"></div>
+          <img src="./img/icon.webp" class="wechatOA-head" alt="徐大兵头像">
           <div class="wechatOA-info">
-            <div class="wechatOA-name" id="wechatOA-name">拾景影像空间摄影</div>
-            <div class="wechatOA-description" id="wechatOA-description"></div>
+            <h3 class="wechatOA-name" id="wechatOA-name">徐大兵Brooke</h3>
+            <p class="wechatOA-description" id="wechatOA-description">分享设计与科技生活</p>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="footer">
-    </div>
-        <a class="footer-item" href="https://www.xiaohongshu.com/user/profile/65dc090d0000000005009711?xsec_token=YBvM2ik9XCJHxSH-34Mqu6AfhOTM0mE11W9ausOuT6n8Y%3D&xsec_source=app_share&xhsshare=WeixinSession&appuid=65dc090d0000000005009711&apptime=1755223952&share_id=2c40e42574204b8e84c122bdbfec3059&share_channel=wechat" title="帮助" target="_blank">小红书</a>
-
-      </div>
-    </div>
-
+        
+        <!-- 微信跳转按钮 -->
+        <div class="wechat-jump-container">
+          <button id="wechat-jump-btn" class="wechat-jump-btn" aria-label="直接跳转到微信" type="button">
+            <span class="wechat-icon" aria-hidden="true">💬</span>
+            <span>直接跳转微信</span>
+          </button>
+          <p class="jump-tips">点击后将跳转至微信客户端</p>
+        </div>
+      </article>
+    </main>
+    
+    <footer class="footer">
+      <a class="footer-item" href="https://www.xiaohongshu.com/user/profile/65dc090d0000000005009711?xsec_token=YBvM2ik9XCJHxSH-34Mqu6AfhOTM0mE11W9ausOuT6n8Y%3D&xsec_source=app_share&xhsshare=WeixinSession&appuid=65dc090d0000000005009711&apptime=1755223952&share_id=2c40e42574204b8e84c122bdbfec3059&share_channel=wechat" target="_blank" rel="noopener noreferrer">小红书</a>
+    </footer>
   </div>
+  
+  <script src="./variables.js"></script>
   <script src="./config.js"></script>
   <script src="./main.js"></script>
 </body>

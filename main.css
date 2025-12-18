@@ -1,183 +1,340 @@
-:root {
-  --background: #f6f7f8;
-  --card-bg: #fff;
-  --second-bg: #F7F7F7;
-  --font-color: #000;
-  --green: #1ba059;
+/* ======================= 全局样式 ======================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #1e2020;
-    --card-bg: #0f0f0f;
-    --second-bg: #303134;
-    --font-color: #fff;
-    --green: #25d678;
-  }
+:root {
+  --background: #ffffff;
+  --card-bg: #ffffff;
+  --second-bg: #f5f5f7;
+  --font-color: #000000;
+  --font-secondary: #86868b;
+  --green: #34c759;
+  --divider-color: #e5e5e7;
+  --shadow-color: rgba(0, 0, 0, 0.04);
+  --shadow-color-elevated: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="dark"] {
+  --background: #000000;
+  --card-bg: #1d1d1f;
+  --second-bg: #2d2d2f;
+  --font-color: #f5f5f7;
+  --font-secondary: #a1a1a6;
+  --divider-color: #424245;
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --shadow-color-elevated: rgba(0, 0, 0, 0.5);
+}
+
+html {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  background: var(--background);
-  margin: 0;
-  padding: 0;
+  background-color: var(--background);
+  color: var(--font-color);
+  transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* ======================= 主容器 ======================= */
 .wechatOA {
   position: relative;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   align-items: center;
-  height: var(--vh);
+  justify-content: center;
+  padding: 20px;
 }
 
-.wechat {
-  margin: auto;
+/* ======================= 主题切换开关容器 ======================= */
+.theme-switch-container {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 100;
 }
 
-.wechat-card {
-  background: var(--card-bg);
-  max-width: 428px;
-  max-height: 569px;
-  border-radius: 16px;
-  padding: 24px 36px 20px 36px;
+/* ======================= 主题切换开关 - Apple风格 ======================= */
+.theme-switch {
+  width: 50px;
+  height: 30px;
+  cursor: pointer;
+  position: relative;
+  background: transparent;
+  border: none;
+  padding: 0;
   display: flex;
-  flex-direction: column;
-  margin-top: 8px;
   align-items: center;
-}
-
-.qrcode {
-  width: 256px;
-  height: 256px;
-  display: flex;
+  justify-content: center;
+  transition: all 0.3s ease;
   border-radius: 12px;
 }
 
-.tips {
-  font-size: 14px;
-  color: var(--font-color);
-  opacity: 0.5;
-  margin-top: 8px;
+.theme-switch:hover {
+  background: var(--shadow-color);
 }
 
-.wechatOA-card {
+.theme-switch:active {
+  transform: scale(0.95);
+}
+
+.switch-track {
   width: 100%;
-  display: flex;
-  margin-top: 16px;
+  height: 100%;
   background: var(--second-bg);
-  padding: 18px;
   border-radius: 16px;
-  align-items: center;
-}
-
-.wechatOA-head {
-  width: 48px;
-  height: 48px;
-  background-image: url(./img/icon.webp);
-  border-radius: 68px;
-  background-size: contain;
-  margin-right: 16px;
-}
-
-.wechatOA-name {
-  font-weight: bold;
-}
-
-.wechatOA-description {
-  font-size: 12px;
-  color: var(--font-color);
-  opacity: 0.5;
-}
-
-a.footer-item {
-  font-size: 14px;
-  color: var(--font-color);
-  opacity: 0.5;
-  text-decoration: none;
-  margin: 20px 0;
-  transition: 0.3s;
   position: relative;
-  margin-right: 20px;
+  transition: background-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid var(--divider-color);
 }
 
-.footer-item:not(:last-child)::after {
-  content: '';
-  position: absolute;
-  right: -10px;
-  top: 0;
-  bottom: 0;
-  width: 1px;
-  background: #ccc;
-}
-
-.footer-item:last-child {
-  margin-right: 0;
-}
-
-a.footer-item:visited {
-  color: var(--font-color);
-}
-
-a.footer-item:hover {
-  color: var(--green);
-  text-shadow: 0px 0px 8px #1ba05914;
-}
-
-.wechat-need-reply {
+.switch-thumb {
+  width: 26px;
+  height: 26px;
   background: var(--card-bg);
-  max-width: 328px;
-  max-height: 569px;
-  border-radius: 16px;
-  padding: 24px 36px 20px 36px;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 4px var(--shadow-color-elevated);
+}
+
+[data-theme="dark"] .switch-thumb {
+  transform: translateX(20px);
+}
+
+/* ======================= 主内容区域 ======================= */
+.wechat {
+  width: 100%;
+  max-width: 390px;
   display: flex;
   flex-direction: column;
-  margin: auto;
-  align-items: center;
+  gap: 24px;
 }
 
-img.wechat-need-reply-copybtn-img {
-  width: 20px;
-  height: 20px;
-  opacity: 0.6;
-  margin-left: 5px;
+/* ======================= 需要回复提示 ======================= */
+.wechat-need-reply {
+  background: var(--second-bg);
+  border-radius: 24px;
+  padding: 24px;
+  text-align: center;
+  border: 1px solid var(--divider-color);
+  box-shadow: 0 1px 3px var(--shadow-color);
+}
+
+.wechat-need-reply-front {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--font-color);
+  margin-bottom: 8px;
+}
+
+.wechat-need-reply-back {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--font-secondary);
+  margin-bottom: 16px;
 }
 
 .wechat-need-reply-copybtn {
-  display: flex;
-  padding: 12px 12px 12px 20px;
   background: var(--green);
-  color: #fff;
+  color: #ffffff;
+  border: none;
   border-radius: 12px;
-  margin: 8px;
+  padding: 12px 24px;
+  font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
-  transition: 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .wechat-need-reply-copybtn:hover {
-  opacity: 0.8;
+  transform: scale(1.02) translateY(-1px);
+  box-shadow: 0 4px 12px rgba(52, 199, 89, 0.3);
 }
 
-span#wechat-need-reply-text {
-  line-height: 1;
-  margin: auto;
+.wechat-need-reply-copybtn:active {
+  transform: scale(0.98);
 }
 
-span.wechat-need-reply-front {
-  font-size: 14px;
-  color: var(--font-color);
-  font-weight: bold;
+.wechat-need-reply-copybtn-img {
+  width: 16px;
+  height: 16px;
 }
 
-span.wechat-need-reply-back {
-  font-size: 14px;
-  color: var(--font-color);
-}
-
-.footer {
+/* ======================= 卡片容器 ======================= */
+.wechat-card {
+  background: var(--card-bg);
+  border-radius: 24px;
+  padding: 40px 32px;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  box-shadow: 0 1px 3px var(--shadow-color);
+  border: 1px solid var(--divider-color);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  gap: 24px;
+}
+
+.wechat-card:hover {
+  box-shadow: 0 4px 16px var(--shadow-color-elevated);
+  transform: translateY(-2px);
+}
+
+/* ======================= 二维码 ======================= */
+.qrcode {
+  width: 200px;
+  height: 200px;
+  border-radius: 16px;
+  background: var(--second-bg);
+  padding: 8px;
+}
+
+/* ======================= 提示文本 ======================= */
+.tips {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--font-secondary);
+}
+
+/* ======================= 公众号卡片 ======================= */
+.wechatOA-card {
+  width: 100%;
+  background: var(--second-bg);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  border: 1px solid var(--divider-color);
+}
+
+.wechatOA-head {
+  min-width: 48px;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  flex-shrink: 0;
+  object-fit: cover;
 }
 
 .wechatOA-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.wechatOA-name {
+  font-size: 15px;
+  font-weight: 600;
   color: var(--font-color);
+  margin-bottom: 4px;
+}
+
+.wechatOA-description {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--font-secondary);
+}
+
+/* ======================= 微信跳转容器 ======================= */
+.wechat-jump-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+.wechat-jump-btn {
+  width: 100%;
+  background: var(--green);
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  padding: 16px 24px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.wechat-jump-btn:hover {
+  transform: scale(1.02) translateY(-1px);
+  box-shadow: 0 8px 24px rgba(52, 199, 89, 0.4);
+}
+
+.wechat-jump-btn:active {
+  transform: scale(0.98);
+}
+
+.wechat-icon {
+  font-size: 18px;
+}
+
+.jump-tips {
+  font-size: 12px;
+  color: var(--font-secondary);
+}
+
+/* ======================= 页脚 ======================= */
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px;
+  text-align: center;
+  background: transparent;
+}
+
+.footer-item {
+  font-size: 13px;
+  color: var(--font-secondary);
+  text-decoration: none;
+  transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.footer-item:hover {
+  color: var(--green);
+}
+
+/* ======================= 响应式设计 ======================= */
+@media (max-width: 480px) {
+  .wechatOA {
+    padding: 16px;
+  }
+  
+  .wechat-card {
+    padding: 32px 24px;
+    gap: 20px;
+  }
+  
+  .qrcode {
+    width: 160px;
+    height: 160px;
+  }
+  
+  .theme-switch-container {
+    top: 12px;
+    right: 12px;
+  }
+  
+  .wechat-jump-btn {
+    font-size: 14px;
+    padding: 14px 20px;
+  }
 }
