@@ -532,18 +532,65 @@ body {
   right: 0;
   padding: 16px;
   text-align: center;
-  background: transparent;
+  background: linear-gradient(180deg, transparent 0%, var(--background) 100%);
+  z-index: 50;
+  pointer-events: none;
 }
 
-.footer-item {
-  font-size: 13px;
-  color: var(--font-secondary);
+.social-links {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  pointer-events: auto;
+}
+
+.social-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  background: var(--second-bg);
+  color: var(--font-color);
   text-decoration: none;
-  transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 12px;
+  border: 1px solid var(--divider-color);
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  white-space: nowrap;
 }
 
-.footer-item:hover {
-  color: var(--green);
+.social-link svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.social-link:hover {
+  background: var(--green);
+  color: #ffffff;
+  border-color: var(--green);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(52, 199, 89, 0.3);
+}
+
+.social-link:active {
+  transform: translateY(0);
+}
+
+.social-link.xiaohongshu:hover {
+  background: linear-gradient(135deg, #ff6b6b, #ff8787);
+  border-color: #ff6b6b;
+  box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+}
+
+.social-link.wechat-qr:hover {
+  background: #09b83e;
+  border-color: #09b83e;
+  box-shadow: 0 4px 12px rgba(9, 184, 62, 0.3);
 }
 
 /* ======================= 响应式设计 ======================= */
@@ -591,5 +638,24 @@ body {
   .wechat-jump-btn {
     font-size: 14px;
     padding: 14px 20px;
+  }
+  
+  .footer {
+    padding: 12px 8px 16px;
+  }
+  
+  .social-links {
+    gap: 8px;
+  }
+  
+  .social-link {
+    padding: 8px 12px;
+    font-size: 12px;
+    gap: 4px;
+  }
+  
+  .social-link svg {
+    width: 14px;
+    height: 14px;
   }
 }

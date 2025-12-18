@@ -325,6 +325,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCopyButton();
   initWechatIdCopy();
   initQRCodeLongPress();
+  initSocialLinks();
 });
 
 // 初始化二维码长按识别功能
@@ -365,9 +366,30 @@ function initQRCodeLongPress() {
   });
 }
 
-// 处理二维码长按
-function handleQRCodeLongPress() {
-  if (isInWechat()) {
-    console.log('二维码长按被检测，微信客户端会自动处理识别');
+// 初始化社交分享链接
+function initSocialLinks() {
+  const wechatQrLink = document.querySelector('.social-link.wechat-qr');
+  if (wechatQrLink) {
+    wechatQrLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      showWechatShareModal();
+    });
   }
+}
+
+// 显示微信分享弹窗
+function showWechatShareModal() {
+  const message = `<strong>分享二维码</strong><br><br>
+长按或保存下方二维码：<br>
+<img src="./img/qrcode.png" style="width: 200px; height: 200px; border-radius: 12px; margin: 16px 0; display: block;" alt="微信二维码">
+<br>然后在微信中打开，扫描即可添加我`;
+  
+  showCustomModal('微信分享', message, [
+    {text: '复制链接', callback: () => {
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        console.log('链接已复制');
+      });
+    }},
+    {text: '关闭'}
+  ]);
 }
