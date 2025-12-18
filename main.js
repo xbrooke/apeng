@@ -137,22 +137,44 @@ function performWechatJump() {
 }
 
 // 降级方案：提供多种选择
-// 使用一个模态框或提示（比alert更正式）
+// 先复制，再提示
 function showFallbackOptions() {
-  const message = `微信URI Scheme没有响应
+  // 先复制用户名到剩贴板（需要在alert前执行）
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(wechatConfig.username).then(() => {
+      // 复制成功
+      const message = `微信未URI响应
+
+已将你的微信号复制到剩贴板：${wechatConfig.username}
 
 请选择以下方式：
+1. 扫描二维码 → 点下方加友
+2. 打开微信 → 搜索上述号码
+3. 直接黄粘贴你剥的号码`;
+      alert(message);
+    }).catch(() => {
+      // 复制失败，按暴露方案处理
+      const message = `微信未URI响应
 
-1. 扫描二维码→ 点下方加友
-2. 会话窗口搜索：${wechatConfig.username}
-3. 复制游客信息：（已为你批量复制）`;
-  alert(message);
-  
-  // 为用户复制信息
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(wechatConfig.username).catch(err => {
-      console.log('复制失败:', err);
+请手动复制你的微信号：${wechatConfig.username}
+
+然后：
+1. 扫描二维码 → 点下方加友
+2. 打开微信 → 搜索上述号码
+3. 或黄粘贴你的号码`;
+      alert(message);
     });
+  } else {
+    // 浏览器不支持 clipboard API
+    const message = `微信未URI响应
+
+你的微信号：${wechatConfig.username}
+
+请选择以下方式：
+1. 扫描二维码 → 点下方加友
+2. 打开微信 → 搜索上述号码
+3. 手动复制上述号码并黄粘贴`;
+    alert(message);
   }
 }
 
