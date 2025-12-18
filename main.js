@@ -58,40 +58,25 @@ function initThemeToggle() {
   }
 }
 
+// 检测是否在微信内部浏览器中
+function isInWechat() {
+  const ua = navigator.userAgent.toLowerCase();
+  return /micromessenger/.test(ua);
+}
+
 // 初始化微信跳转功能
 function initWechatJump() {
   const jumpBtn = document.getElementById('wechat-jump-btn');
   if (jumpBtn) {
     jumpBtn.addEventListener('click', () => {
-      // 使用微信最新的 URI Scheme
-      // 方案1: 直接跳转到微信搜索页面搜索用户名
-      const searchUrl = `weixin://dl/search/?t=${wechatConfig.username}`;
-      
-      // 记录当前时间用于超时检测
-      const startTime = Date.now();
-      const timeout = 2500; // 2.5秒超时
-      
-      // 尝试跳转微信
-      window.location.href = searchUrl;
-      
-      // 监听页面可见性变化（如果用户切换到微信应用，页面会隐藏）
-      const handleVisibilityChange = () => {
-        if (document.hidden) {
-          document.removeEventListener('visibilitychange', handleVisibilityChange);
-          clearTimeout(fallbackTimer);
-        }
-      };
-      document.addEventListener('visibilitychange', handleVisibilityChange);
-      
-      // 如果超过超时时间仍未切换应用，使用降级方案
-      const fallbackTimer = setTimeout(() => {
-        document.removeEventListener('visibilitychange', handleVisibilityChange);
-        
-        // 降级方案：使用微信网页版或通过二维码辅助
-        const fallbackUrl = `https://weixin.qq.com/cgi-bin/readtemplate?t=registerpage&lang=zh_CN`;
-        // 或者引导用户使用二维码
-        alert('微信未响应。请扫描页面二维码或直接在微信中搜索：' + wechatConfig.username);
-      }, timeout);
+      // 检查是否在微信内部浏览器
+      if (isInWechat()) {
+        // 在微信内部，无法跳转应用，提示用户在浏览器中打开
+        showWechatInternalTip();
+      } else {
+        // 在浏览器中，可以正常跳转
+        performWechatJump();
+      }
     });
     
     // 键盘支持
@@ -102,6 +87,51 @@ function initWechatJump() {
       }
     });
   }
+}
+
+// 在微信内部时的提示方案
+function showWechatInternalTip() {
+  const message = `亲，你在微信内部打开了本页面。
+
+请使用右上角菜单，选择「在浏览器中打开」或「用系统浏览器打开」，
+然后点击按钮即可直接跳转到微信添加页面。
+
+或者，你也可以在微信中直接搜索：${wechatConfig.username}`;
+  alert(message);
+}
+
+// 在浏览器中的跳转方案
+function performWechatJump() {
+  // 使用微信最新的 URI Scheme
+  const searchUrl = `weixin://dl/search/?t=${wechatConfig.username}`;
+  
+  const timeout = 2500; // 2.5秒超时
+  
+  // 尝试跳转微信
+  window.location.href = searchUrl;
+  
+  // 监听页面可见性变化（如果用户切换到微信应用，页面会隐藏）
+  const handleVisibilityChange = () => {
+    if (document.hidden) {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      clearTimeout(fallbackTimer);
+    }
+  };
+  document.addEventListener('visibilitychange', handleVisibilityChange);
+  
+  // 如果超过超时时间仍未切换应用，使用降级方案
+  const fallbackTimer = setTimeout(() => {
+    document.removeEventListener('visibilitychange', handleVisibilityChange);
+    
+    // 降级方案：引导用户使用二维码或手动搜索
+    const message = `微信未响应。
+
+请选择以下方式之一：
+1. 扫描页面上的二维码
+2. 在微信中搜索用户名：${wechatConfig.username}
+3. 在浏览器地址栏手动输入微信用户名`;
+    alert(message);
+  }, timeout);
 }
 
 // 初始化复制功能
