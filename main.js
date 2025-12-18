@@ -102,13 +102,15 @@ function showWechatInternalTip() {
 
 // 在浏览器中的跳转方案
 function performWechatJump() {
-  // 使用微信最新的 URI Scheme
-  const searchUrl = `weixin://dl/search/?t=${wechatConfig.username}`;
+  // 使用微信官方 URI Scheme 直接跳转到添加用户页面
+  // weixin://bizmall/malldetail?id=用户名 - 跳转到用户主页
+  // weixin://profile/username/用户名 - 直接添加用户
+  const addUserUrl = `weixin://profile/username/${wechatConfig.username}`;
   
   const timeout = 2500; // 2.5秒超时
   
   // 尝试跳转微信
-  window.location.href = searchUrl;
+  window.location.href = addUserUrl;
   
   // 监听页面可见性变化（如果用户切换到微信应用，页面会隐藏）
   const handleVisibilityChange = () => {
