@@ -222,7 +222,7 @@ function showFallbackOptions() {
 推荐方案：<br>
 <strong>1. 扫描二维码</strong> ：会自动跳转添加我<br>
 <strong>2. 在微信中搜索</strong>：搜索手机号 <strong>${wechatConfig.username}</strong><br>
-<strong>3. 复制微信号</strong>：号码已复制，在微信中黄粘贴`;
+<strong>3. 复制微信号</strong>：号码已复制，在微信中粘贴`;
   
   // 尝试复制微信号
   if (navigator.clipboard) {
