@@ -96,7 +96,8 @@ function showWechatInternalTip() {
 请使用右上角菜单，选择「在浏览器中打开」或「用系统浏览器打开」，
 然后点击按钮即可直接跳转到微信添加页面。
 
-或者，你也可以在微信中直接搜索：${wechatConfig.username}`;
+或者，你也可以在微信中长按下方二维码识别，
+或者直接搜索：${wechatConfig.username}`;
   alert(message);
 }
 
@@ -270,4 +271,50 @@ document.addEventListener('DOMContentLoaded', () => {
   initWechatJump();
   initCopyButton();
   initWechatIdCopy();
+  initQRCodeLongPress();
 });
+
+// 初始化二维码長按識別功能
+function initQRCodeLongPress() {
+  const qrcode = document.getElementById('wechat-qrcode');
+  if (!qrcode) return;
+  
+  // 識別是否在微信中，如果是，添加提示文本
+  if (isInWechat()) {
+    const tipsText = document.querySelector('.tips');
+    if (tipsText) {
+      tipsText.innerHTML = '扫描或<strong>長按</strong>二维码添加微信';
+    }
+  }
+  
+  // 添加長按傩事件監听
+  let pressTimer = null;
+  const longPressDuration = 500;
+  
+  qrcode.addEventListener('touchstart', () => {
+    pressTimer = setTimeout(() => {
+      handleQRCodeLongPress();
+    }, longPressDuration);
+  });
+  
+  qrcode.addEventListener('touchend', () => {
+    if (pressTimer) {
+      clearTimeout(pressTimer);
+      pressTimer = null;
+    }
+  });
+  
+  qrcode.addEventListener('touchcancel', () => {
+    if (pressTimer) {
+      clearTimeout(pressTimer);
+      pressTimer = null;
+    }
+  });
+}
+
+// 處理二维码長按
+function handleQRCodeLongPress() {
+  if (isInWechat()) {
+    console.log('二维码長按被檢測，微信客戶端會自動处理識別');
+  }
+}
