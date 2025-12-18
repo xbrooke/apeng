@@ -587,18 +587,6 @@ body {
   box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
 }
 
-.social-link.share-btn {
-  background: linear-gradient(135deg, var(--green), #34c759);
-  color: #ffffff;
-  border-color: var(--green);
-}
-
-.social-link.share-btn:hover {
-  background: linear-gradient(135deg, #30b959, #2eaf51);
-  border-color: #2eaf51;
-  box-shadow: 0 4px 12px rgba(52, 199, 89, 0.4);
-}
-
 /* ======================= 响应式设计 ======================= */
 @media (max-width: 480px) {
   .wechatOA {
